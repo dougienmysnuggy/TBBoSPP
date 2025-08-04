@@ -10,6 +10,8 @@ Pico = You have a correct digit in the wrong place
 Fermi = You have a correct digit in its correct place
 Bagels = Your guess has zero correct digits
 
+TODO: error checking
+
 '''
 
 import random, sys
