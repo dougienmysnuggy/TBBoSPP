@@ -33,52 +33,51 @@ birthday in a group of X members.
 - When done display the stats
 '''
 
+import random, datetime
+
 def get_num_birthdays():
-    continue
+    return input('Generate how many birthdays? >')
 
 def generate_random_birthday():
+    new_year = datetime.date(2001, 1, 1)
+    random_number_of_days = datetime.timedelta(random.randint(0, 364))
+    birthday = new_year + random_number_of_days
+    return birthday
 
-
-def run_simulation(): 
+def run_simulation(num_birthdays): 
     birthday_list = []
-    number_of_birthdays = get_num_birthdays()
-    for i in range(number_of_birthdays):
+    for i in range(int(num_birthdays)):
         birthday = generate_random_birthday()
         birthday_list.append(birthday)
     return birthday_list
 
-def check_for_matches():
-    continue
+def check_for_matches(birthday_list):
+    if len(birthday_list) != len(set(birthday_list)):
+        return True
+    else:
+        return False
 
-def update_progress():
-    continue
+def update_progress(n):
+    if n % 10000 == 0:
+        print ('{} Simulations Ran...'.format(n))
+        
+def display_results(matches):
+    #Calculate percentage
+    percent_matched = (matches / 100000) * 100
+    percent = "{:.2f}".format(percent_matched)
+    print('\n100000 Simulations total')
+    print('{} with matching birthdays'.format(matches))
+    print('{} had at least 2 people with the same birthday'.format(percent))
 
 def main():
-    number_of_birthdays = get_num_birthdays()    
-    print('0 Simulations Ran...')
-    for i in range(100000):
-        birthdays = run_simulation()
-        check_for_matches(birthdays)
-        update_progress()
-    '''
-    # create a list of birthdays
-    birthday_list = []
-    duplicate_counter = 0
-    
-    
-    for i in range(number_of_birthdays):
-        birthday = generate_random_birthday()
-        birthday_list.append(birthday)
+    number_of_birthdays = input('Enter # of people in the room (1 - 100): ') 
+    number_of_matches = 0   
+    for i in range(100001):
+        birthdays = run_simulation(number_of_birthdays)
+        if check_for_matches(birthdays):
+            number_of_matches += 1
+        update_progress(i)
+    display_results(number_of_matches)
         
-        # check birthday list for duplicates
-        if len(birthday_list) != len(set(birthday_list)):
-            duplicate_counter += 1
-
-        # progress updates
-        if i % 10000 == 0:
-            print('{} Simulations Ran...'.format(i))
-            
-    '''
-    
 if __name__ == '__main__':
     main()
