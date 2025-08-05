@@ -80,23 +80,25 @@ def get_user_input():
 def check_guess(guess, secret):
     #Check the guess against the secret_number
     # Initialize the results string
-    result = ''
+    result = []
     
     for i in range(NUM_DIGITS):
         # Check for Fermi
         if guess[i] == secret[i]:
-            result += 'Fermi '
+            result.append('Fermi')
         # Check for Pico
         elif guess[i] in secret:
-            result += "Pico "
+            result.append('Pico')
         # Else don't add anything
         else:
             continue
         
-    if result == '':
+    if len(result) == 0:
         return "Bagels"
     else:
-        return result
+        #sort by alphabetical to not give away too much
+        result.sort()
+        return ' '.join(result)
     
 if __name__ == '__main__':
     main()
