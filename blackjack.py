@@ -1,208 +1,89 @@
-import cards
-import random
+'''
+Blackjack
 
-"""
-    Blackjack by Wes Leonard @dougienmesnuggy on Twitter. 
-    
-    This is a simple Python Blackjack game that uses the cards library that I
-    created for various card games.
-    
-"""
+Text version of blackjack. 
 
-class Player():
-    def __init__(self, name, bankroll, hand, bet):
-        self.player_name = name
-        self.player_money = bankroll
-        self.player_hand = hand
-        self.player_bet = bet
-        
-    
-    def draw_card(self, deck):
-        self.player_hand.append(deck.deal_card())
+Steps:
 
-        
-def get_player_bet(p):
-    bet_amount = int(input(f'{p.player_name} - Enter bet amount ($1-500): '))
-    if bet_amount not in range (1, 501):
-        print('Illegal bet. Try again')
-        get_player_bet(p)
-    else:
-        return bet_amount
-    
-    
-def get_num_players():
-    num = int(input('Number of Players? (1-4): '))
-    if num not in range(1,5):
-        print('Invalid entry. Try again.')
-        get_num_players()
-    else:
-        return num    
-    
+Show Money
+Get Bet
+    Make sure it's a valid bet
+create a deck
+shuffle the deck
+deal cards to build player hand and dealer hand
+    show both player's cards, but only 1 of the dealer's
+evaluate hands
+Hit, Stand, Double
+If Hit, deal another card, evaluate hand, back to hsd
+If Stand, dealer's turn, evaluate hands and see who wins
+Double player gets 1 more hit only, then dealer's turn, evaluate and see who wins
 
-def get_hand_value(ply_hand):
-    # pass this function a hand and it will return the blackjack value
-    value = 0
-    has_aces = False
-    for c in ply_hand:
-        #check for aces
-        if int(c.rank) == 1:
-            has_aces = True
-        value += min(c.rank, 10)
-    if has_aces:
-        if value + 10 <= 21:
-            value += 10
-        has_aces == False
-    return value
-    
- 
-def format_card(c):
-    """
-        ranks:
-        11 = J
-        12 = Q
-        13 = K
-        1 = A
-        
-        suits:
-        D = ♦
-        H = ♥
-        C = ♣
-        S = ♠
-    """
-    card_string = ''
-    if c.rank == 1:
-        card_string += "A"
-    elif c.rank == 11:
-        card_string += "J"
-    elif c.rank == 12:
-        card_string += "Q"
-    elif c.rank == 13:
-        card_string += "K"
-    else:
-        card_string += str(c.rank)
-        
-    if c.suit == "D":
-        card_string += "♦"
-    elif c.suit == "H":
-        card_string += "♥"
-    elif c.suit == "C":
-        card_string += "♣"
-    elif c.suit == "S":
-        card_string += "♠"
-    else:
-        #This should never happen
-        card_string += "E"
-    return card_string
+Author: Wes Leonard
+Email: leonardw@gmail.com
+'''
 
-    
-def print_player_hands(p):
-    """
-    Player 1 (bet): XX, XX (value)
-    Player 2 (bet): XX, XX (value)
-    Player 3 (bet): XX, XX (value)
-    
-    Player X Turn:
-    Bet:
-    Current Hand:
-    (H)it, (S)tand, (D)ouble Down, Sur(r)ender
-    """
-    p_name = p.player_name
-    p_bet = p.player_bet
-    p_hand = []
-    for c in p.player_hand:
-        p_hand.append(format_card(c))
-    p_hand_value = get_hand_value(p.player_hand)
-    print(f'{p_name} (${p_bet}): {p_hand} ({p_hand_value})')
-    
-    
-def get_player_action(p, deck):
-    # Hit, Stand, Double, Surrender
-    action = input(f'{p.player_name} (H)it, (S)tand, (D)ouble, Sur(R)ender').upper()
-    if action not in ['H', 'S', 'D', 'R']:
-        print('Invalid action. Try again!')
-        get_player_action(p, deck)
-    return action    
-    
+import sys, random
+
+HEARTS = chr(9829)
+DIAMONDS = chr(9830)
+SPADES = chr(9824)
+CLUBS = chr(9827)
+
+def get_bet():
+    wager = input('Enter Bet Amount: ')
+    if wager == "QUIT":
+        sys.exit()
+    return int(wager)
+
+def build_deck():
+    card_deck = []
+    for suit in (HEARTS, DIAMONDS, SPADES, CLUBS):
+        for rank in range(2,11):
+            card_deck.append((str(rank), suit))
+        for rank in ("J", "Q", "K", "A"):
+            card_deck.append((rank, suit))
+    random.shuffle(card_deck)
+    return card_deck
+
+def display_hand(player):
+    '''
+    ---
+    '''
+    pass
 
 def main():
-    # Initialize round                
-    blackjack_deck = cards.Deck()
-    blackjack_deck.shuffle()
-    all_players = []
-    num_players = get_num_players()
-
-    #create appropriate amount of players.   
-    for i in range(num_players):
-        name = "PLAYER " + str(i + 1)
-        new_player = Player(name, 5000, [], 0)
-        all_players.append(new_player)
-        
-    # dealer will always be last player in the list (num_players + 1)
-    new_player = Player("DEALER", 999999, [], 0)
-    all_players.append(new_player)
-    
-    #blackjack_card = cards.Card("","")
-
-    # Main game loop
+    money = 5000
+    # game loop
     while True:
-        # Get a bet from each player (except Dealer)
-        for player in all_players[:-1]:
-            # if we have money, set player bet, reduce player bankroll
-            if player.player_money > 0:
-                player.player_bet = int(get_player_bet(player))
-                # IF player has money, but not enough to cover bet, it will adjust bet to remaining money
-                if player.player_bet > int(player.player_money):
-                    player.player_bet = int(player.player_money)
-                player.player_money -= player.player_bet
-
-       
-        # Deal 2 cards to each player & dealer
-        for player in all_players:
-            player.draw_card(blackjack_deck)
-            
-        for player in all_players:
-            player.draw_card(blackjack_deck)
-             
-        # Need to display the hands in a pleasing manner
-        for player in all_players:
-            print_player_hands(player)
-
-        # Will implement splitting later
-         
-        # Starting at player 1, get player action until they stand or bust
-        for player in all_players:
-            is_bust = False
-            while is_bust == False: #Player loop (end when bust, or stand, or double (later))
-                player_action = get_player_action(player, blackjack_deck)
-                if player_action == "H":
-                    player.player_hand.append(player.draw_card(blackjack_deck))
-                elif player_action == "S":
-                    continue
-                #elif player_action == "D":
-                #    pass
-                #elif player_action == "R":
-                #    pass
-                
-                # see if we busted
-                hand_value = get_hand_value(player.player_hand)
-                if int(hand_value) > 21:
-                    is_bust = True
-                else:
-                    is_bust = False
-                    
-                if is_bust:
-                    print('BUSTED!')
-
-        # if not bust go back to beginning of player loop with updated hand
-        # continue loop for each player. Then do dealer with qualifying conditions like in casinos
+        print('You have ${}'.format(money))
+        valid_bet = False
+        # make sure we get a valid bet
+        while valid_bet == False:
+            bet = get_bet()
+            if bet < 5 or bet > money:
+                print('Invalid Wager. Try again.')
+                valid_bet = False
+            else:
+                valid_bet = True
         
-        # determine winners
+        #subtract wager from total
+        money -= bet
+        dealer_hand = []
+        player_hand = []
+        # get a new, shuffled deck
+        deck = build_deck()
+        # time to deal
+        # deal one to player, one to dealer, repeate
+        player_hand.append(deck.pop())
+        dealer_hand.append(deck.pop())
+        player_hand.append(deck.pop())
+        dealer_hand.append(deck.pop())
+        #Display dealer hand (first card is backside), other is face up
+        #Display player hand (both cards face up)
+        display_hand(dealer_hand)
+        display_hand(player_hand)
         
-        # pay winners
-        
-        # repeat until game quit.
         
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
-
