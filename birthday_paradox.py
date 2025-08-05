@@ -53,7 +53,7 @@ def main():
         run_simulation()
         check_for_matches()
         update_progress()
-    
+    '''
     # create a list of birthdays
     birthday_list = []
     duplicate_counter = 0
@@ -70,6 +70,8 @@ def main():
         # progress updates
         if i % 10000 == 0:
             print('{} Simulations Ran...'.format(i))
+            
+    '''
     
 if __name__ == '__main__':
     main()
