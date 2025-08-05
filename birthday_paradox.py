@@ -10,29 +10,6 @@ This will give us a percentage of how many people have the same
 birthday in a group of X members.
 '''
 
-#Logic
-'''
-- Get a number between 1-100 from user
-- generate that many random birthdays
-    - new list
-    - set date to 1/1/2001
-    - get a random # days between 1-365
-    - add that random # to the 1/1/2001 date
-    - append that date to the list.
-    - year is irrelevant 
-    
-- Check to see if any of the birthdays match
-    -if they match match = True, else match = False
-    - match_count += 1
-    - sim_count += 1
-    
-- Repeat 100K times
-    - Create a progress counter
-    - if counter % 10K == 0 print a message showing counter
-    
-- When done display the stats
-'''
-
 import random, datetime
 
 def get_num_birthdays():
