@@ -72,9 +72,14 @@ def main():
     '''
     message = get_message()
     for line in bitmap.splitlines():
+        new_line = ''
         for i, char in enumerate(line):
-            if bitmap[i] == "*":
-                print(get_message_char(message, i))       
-        
+            if char == "*":
+                new_line += get_message_char(message, i)
+            elif char == ".":
+                new_line += get_message_char(message, i)
+            else:
+                new_line += " "       
+        print(new_line)
 if __name__ == '__main__':
     main()
