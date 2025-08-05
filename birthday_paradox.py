@@ -36,8 +36,16 @@ birthday in a group of X members.
 def get_num_birthdays():
     continue
 
+def generate_random_birthday():
+
+
 def run_simulation(): 
-    continue
+    birthday_list = []
+    number_of_birthdays = get_num_birthdays()
+    for i in range(number_of_birthdays):
+        birthday = generate_random_birthday()
+        birthday_list.append(birthday)
+    return birthday_list
 
 def check_for_matches():
     continue
@@ -46,12 +54,11 @@ def update_progress():
     continue
 
 def main():
-    
     number_of_birthdays = get_num_birthdays()    
     print('0 Simulations Ran...')
     for i in range(100000):
-        run_simulation()
-        check_for_matches()
+        birthdays = run_simulation()
+        check_for_matches(birthdays)
         update_progress()
     '''
     # create a list of birthdays
