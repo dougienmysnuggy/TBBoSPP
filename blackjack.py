@@ -47,8 +47,13 @@ def build_deck():
 
 def display_hand(player):
     '''
-    ---
+     ---
+    | R |
+    | S |
+     ---
     '''
+
+    
     pass
 
 def main():
