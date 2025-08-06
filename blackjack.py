@@ -153,8 +153,5 @@ def main():
             get_player_command()
         #now dealer needs to hit on <=16 and stand on >= 17
         
-        
-        
-
 if __name__ == '__main__':
     main()
