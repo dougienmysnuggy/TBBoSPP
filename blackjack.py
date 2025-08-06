@@ -53,30 +53,20 @@ def display_hand(dealer, player):
     |  S|
      ---
      
-      ---
+     ---
     |#  |
     |###| Face Down (Backside)
     |  #|
      ---    
     '''
     
-    card_positions = (''' 
-      DEALER    
-     ---   ---
-    |R  | |#  |
-    | * | |###|
-    |  S| |  #|
-     ---   ---
-     
-       PLAYER
-     ---   ---
-    |R  | |R  |
-    | * | | * |
-    |  S| |  S|
-     ---   ---
-                      ''')
+    columns = ["", "", "", "", ""]
     
-    print(card_positions)
+    #show dealer hand
+    #first card face up, 2nd face down
+    
+
+    
     
     
 
