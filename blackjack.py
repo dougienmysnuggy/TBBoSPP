@@ -28,6 +28,7 @@ HEARTS = chr(9829)
 DIAMONDS = chr(9830)
 SPADES = chr(9824)
 CLUBS = chr(9827)
+BACKSIDE = 'backside'
 
 def get_bet():
     wager = input('Enter Bet Amount: ')
@@ -45,41 +46,76 @@ def build_deck():
     random.shuffle(card_deck)
     return card_deck
 
-def display_hand(dealer, player):
-    '''
-     ---
-    |R  |
-    | * | Face Up
-    |  S|
-     ---
-     
-      ---
-    |#  |
-    |###| Face Down (Backside)
-    |  #|
-     ---    
-    '''
+def display_hand(dealer, player, show_dealer_hand):
+    # for each card in hand
+    # build lines (5 columns 5 rows)
+    #  ___
+    # |R  |
+    # | S |
+    # |__R|
+    #  
     
-    card_positions = (''' 
-      DEALER    
-     ---   ---
-    |R  | |#  |
-    | * | |###|
-    |  S| |  #|
-     ---   ---
-     
-       PLAYER
-     ---   ---
-    |R  | |R  |
-    | * | | * |
-    |  S| |  S|
-     ---   ---
-                      ''')
+    #show dealer's hand
+    if show_dealer_hand:
+        #show both cards
+        print('DEALER:', get_hand_value(dealer))
+        display_cards(dealer)
+    else:
+        #2nd card is face down
+        print('DEALER: ???', )
+        display_cards([BACKSIDE] + dealer[1:])
+        
+    #show player's hand
+    print('Player:', get_hand_value(player))
+    display_cards(player)
+        
+def display_cards(hand):  
+    #build the cards row by row. 
+    rows = ['', '', '', '', '']
+    for i, card in enumerate(hand):
+        #print top row
+        rows[0] += ' ___ '
+        if card == 'backside':
+            #print backside of card
+            rows[1] += '|## |'
+            rows[2] += '|###|'
+            rows[3] += '|_##|'
+        else:
+            rank, suit = card
+            rows[1] += '|{}  |'.format(rank)
+            rows[2] += '| {} |'.format(suit)
+            rows[3] += '|__{}|'.format(rank)           
+        
+    for row in rows:
+        print(row)         
     
-    print(card_positions)
+def get_hand_value(hand):
+    # gets the value of the hand passed
     
+    aces = 0 #check our aces later, they'll be 1 and then at the end we'll see if they can be 10
+    value = 0 #initialize hand value
     
+    for card in hand:
+        rank = card[0]
+        if rank == 'A':
+            aces += 1
+        elif rank in ["J", "Q", "K"]:
+            value += 10
+        else:
+            value += int(rank)
+    
+    # now add 1 for each ace
+    value += aces
+    
+    for i in range(aces):
+        if value + 10 <= 21:
+            value += 10
+    
+    return value    
 
+def get_player_command():
+    pass
+    
 def main():
     money = 5000
     # game loop
@@ -96,6 +132,7 @@ def main():
                 valid_bet = True
         
         #subtract wager from total
+        print()
         money -= bet
         dealer_hand = []
         player_hand = []
@@ -109,7 +146,13 @@ def main():
         dealer_hand.append(deck.pop())
         #Display dealer hand (first card is backside), other is face up
         #Display player hand (both cards face up)
-        display_hand(dealer_hand, player_hand)
+        display_hand(dealer_hand, player_hand, False)
+        #now player needs to hit stand or double until he busts or stands or doubles and gets 1 card
+        while True:
+            #loop for player inputs
+            get_player_command()
+        #now dealer needs to hit on <=16 and stand on >= 17
+        
         
         
 
