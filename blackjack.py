@@ -45,16 +45,40 @@ def build_deck():
     random.shuffle(card_deck)
     return card_deck
 
-def display_hand(player):
+def display_hand(dealer, player):
     '''
      ---
-    | R |
-    | S |
+    |R  |
+    | * | Face Up
+    |  S|
      ---
+     
+      ---
+    |#  |
+    |###| Face Down (Backside)
+    |  #|
+     ---    
     '''
-
     
-    pass
+    card_positions = (''' 
+      DEALER    
+     ---   ---
+    |R  | |#  |
+    | * | |###|
+    |  S| |  #|
+     ---   ---
+     
+       PLAYER
+     ---   ---
+    |R  | |R  |
+    | * | | * |
+    |  S| |  S|
+     ---   ---
+                      ''')
+    
+    print(card_positions)
+    
+    
 
 def main():
     money = 5000
@@ -85,8 +109,7 @@ def main():
         dealer_hand.append(deck.pop())
         #Display dealer hand (first card is backside), other is face up
         #Display player hand (both cards face up)
-        display_hand(dealer_hand)
-        display_hand(player_hand)
+        display_hand(dealer_hand, player_hand)
         
         
 
