@@ -114,8 +114,12 @@ def get_hand_value(hand):
     return value    
 
 def get_player_command():
-    pass
-    
+    player_command = (input('(h)it (s)tand or (d)ouble? '))
+    if player_command.upper() not in ["H", "S", "D"]:
+        get_player_command
+
+    return player_command.upper()
+
 def main():
     money = 5000
     # game loop
@@ -150,8 +154,51 @@ def main():
         #now player needs to hit stand or double until he busts or stands or doubles and gets 1 card
         while True:
             #loop for player inputs
-            get_player_command()
+            action = get_player_command()
+            if action == "D":
+                #doubled down (get 1 card, break)
+                player_hand.append(deck.pop())
+                display_hand(dealer_hand, player_hand, False)
+                break
+            elif action == "H":
+                #hit 
+                player_hand.append(deck.pop())
+                display_hand(dealer_hand, player_hand, False)
+            else:
+                #stand
+                display_hand(dealer_hand, player_hand, False)
+                break
+
+            # evaluate player_hand to see if we continue
+            if get_hand_value(player_hand) > 21:
+                print('YOU BUSTED! GAME OVER')
+                break
+            elif get_hand_value(player_hand) == 21:
+                # dealer's turn!
+                break
+
+
         #now dealer needs to hit on <=16 and stand on >= 17
-        
+        while True:
+            if get_hand_value(dealer_hand) < 17:
+                dealer_hand.append(deck.pop())
+                display_hand(dealer_hand, player_hand, True)
+            else:
+                break
+            if get_hand_value(dealer_hand) > 21:
+                print('DEALER BUSTED! YOU WIN!')
+                money += bet * 2
+                break
+            if get_hand_value(player_hand) > get_hand_value(dealer_hand):
+                print('YOU WIN!')
+                money += bet * 2
+                break
+            elif get_hand_value(player_hand) < get_hand_value(dealer_hand):
+                print('DEALER WINS!')
+                break
+            else:
+                print('PUSH! YOU GET YOUR BET BACK')
+                money += bet
+                break
 if __name__ == '__main__':
     main()
