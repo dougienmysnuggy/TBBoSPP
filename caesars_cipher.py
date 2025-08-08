@@ -20,6 +20,7 @@ Print Message
 copy to clipboard
 '''
 
+import sys
 try:
     import pyperclip
 except ImportError:
@@ -34,14 +35,17 @@ def transform_message(msg, k, m):
             new_message += char #remains unchanged
         else:
             num = SYMBOLS.find(char)
-            if m == 'D':
+            if m.upper() == 'D': # check for decrypt mode
                 num -= k
             else:
                 num += k
+                
+            # to see if we went past A or Z and adjusts accordingly
             if num >= len(SYMBOLS):
                 num -= len(SYMBOLS)
             if num < 0:
                 num += len(SYMBOLS)
+                
             new_message += SYMBOLS[num]
     return new_message
 
@@ -52,24 +56,26 @@ def main():
     
     print('Caesar Cipher by Wes Leonard') 
     #make sure they enter "e" or "d" else ask again
-    while mode.upper() != 'E' and mode.upper() != 'D':
-        mode = input('(e)ncrypt or (d)ecrypt? ')
-    #Make sure they put in a valid key
     while True:
-        key = int(input('Please enter key (0-26): '))
-        if key >= 0 and key < len(SYMBOLS):
-            break
-    message = input('Please enter message: ')
-    message = message.upper()
-    
-    transformed_message = transform_message(message, key, mode)
-    print(transformed_message)
-    #Copy message to clipboard 
-    try:
-        pyperclip.copy(transformed_message)
-        print('Message copied to clipboard...')
-    except:
-        pass 
+        while mode.upper() != 'E' and mode.upper() != 'D':
+            mode = input('(e)ncrypt or (d)ecrypt? ')
+        #Make sure they put in a valid key
+        while True:
+            key = int(input('Please enter key (0-25): '))
+            if key >= 0 and key < len(SYMBOLS):
+                break
+        message = input('Please enter message (Type: "QUIT" to exit): ')
+        message = message.upper()
+        if message.upper() == 'QUIT':
+            sys.exit()
+        transformed_message = transform_message(message, key, mode)
+        print(transformed_message)
+        #Copy message to clipboard 
+        try:
+            pyperclip.copy(transformed_message)
+            print('Message copied to clipboard...')
+        except:
+            pass 
 
 if __name__ == '__main__':
     main()
