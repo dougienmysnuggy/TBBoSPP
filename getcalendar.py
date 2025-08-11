@@ -57,36 +57,26 @@ DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
         'Sunday']
 
 def print_divider_line():
-    print('+----------+----------+----------+----------+----------+----------+----------+')
+    return '+----------+----------+----------+----------+----------+----------+----------+'
     
 def print_days_of_week():
-    print('...Sunday.....Monday....Tuesday...Wednesday...Thursday....Friday....Saturday..')
-    
-def print_date_row(dates):
-    print(f'|{str(dates[0]).rjust(2)}        |{str(dates[1]).rjust(2)}        |{str(dates[2]).rjust(2)}        |{str(dates[3]).rjust(2)}        |' +
-          f'{str(dates[4]).rjust(2)}        |{str(dates[5]).rjust(2)}        |{str(dates[6]).rjust(2)}        |')
-    
+    return '...Sunday.....Monday....Tuesday...Wednesday...Thursday....Friday....Saturday..'
+   
 def print_verticle_dividers():
-    print('|          |          |          |          |          |          |          |')
+    return '|          |          |          |          |          |          |          |'
     
-def build_date_list(d, date_num):
-    # this function returns a list where
-    # sunday = d[0] ... saturday = d[6]
-        
-    day_of_week = datetime.date.weekday(d)
-    
-    days_list = {'Monday' : '', 'Tuesday': '', 'Wednesday' : '', 'Thursday' : '',
-                 'Friday' : '', 'Saturday' : '', 'Sunday' : ''}
-    
-    for k, v in days_list.items():
-        print(k + ' ' + v)
-                    
-    return days_list
+def build_date_line(current_date):
+    #builds the date line for the calendar
+    date_line = '' #string to build line
+    while datetime.date.weekday(current_date) != 6: #backtrack to Sunday
+        current_date -= datetime.timedelta(days=1) # go back 1 day
+    for i in range(7):
+        date_line += f'|{str(datetime.date.day).rjust(2)}        '
+        current_date += datetime.timedelta(days=1)
 
-def main():
-    
-    calendar = '' #going to build this into a huge string
-    
+    return date_line
+
+def main():   
     #get month
     while True:
         month = input('Enter month (1-12): ')
@@ -100,24 +90,19 @@ def main():
         year = int(year)
         if year >= 0 and year <= 9999:
             break
-        
-    # Determine which day of week
+
     working_date = datetime.date(year, month, 1)
-      
+         
+    calendar = ''
     # Print Header and calendar outline
     header = MONTHS[month - 1] + ' ' + str(year)
-    print(header.center(78))
-    print_days_of_week()
-    
+    calendar += header.center(78)
+    calendar += print_days_of_week()
+    calendar += print_divider_line()
+
     # Need logic to build the date list
-    date_list = build_date_list(working_date, 1)
-    
-    print_divider_line()
-    for i in range(6): # probably need to make this a variable for months that use less rows
-        print_date_row(date_list)
-        for i in range(3):
-            print_verticle_dividers()
-        print_divider_line()
+    calendar += build_date_line(working_date)
+    print (calendar)
             
 if __name__ == "__main__":
     main()
