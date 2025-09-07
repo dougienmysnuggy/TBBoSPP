@@ -48,7 +48,7 @@ Logic:
 - Get Year from user
 
 '''
-import datetime
+import datetime, os
 
 MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
           'August', 'September', 'October', 'November' 'December']
@@ -57,25 +57,14 @@ DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
         'Sunday']
 
 def print_divider_line():
-    return '+----------+----------+----------+----------+----------+----------+----------+'
+    return '+----------+----------+----------+----------+----------+----------+----------+\n'
     
 def print_days_of_week():
-    return '...Sunday.....Monday....Tuesday...Wednesday...Thursday....Friday....Saturday..'
+    return '...Sunday.....Monday....Tuesday...Wednesday...Thursday....Friday....Saturday..\n'
    
 def print_verticle_dividers():
-    return '|          |          |          |          |          |          |          |'
+    return '|          |          |          |          |          |          |          |\n'
     
-def build_date_line(current_date):
-    #builds the date line for the calendar
-    date_line = '' #string to build line
-    while datetime.date.weekday(current_date) != 6: #backtrack to Sunday
-        current_date -= datetime.timedelta(days=1) # go back 1 day
-    for i in range(7):
-        date_line += f'|{str(datetime.date.day).rjust(2)}        '
-        current_date += datetime.timedelta(days=1)
-
-    return date_line
-
 def main():   
     #get month
     while True:
@@ -97,12 +86,35 @@ def main():
     # Print Header and calendar outline
     header = MONTHS[month - 1] + ' ' + str(year)
     calendar += header.center(78)
+    calendar += '\n\n'
     calendar += print_days_of_week()
     calendar += print_divider_line()
 
-    # Need logic to build the date list
-    calendar += build_date_line(working_date)
+    # loop this until we are done
+    while True:    
+        date_line = '' #string to build line
+        while datetime.date.weekday(working_date) != 6: #backtrack to Sunday
+            working_date -= datetime.timedelta(days=1) # go back 1 day
+        for i in range(7):
+            day_num = str(working_date.day).rjust(2)
+            date_line += '|' + day_num + '        '
+            working_date += datetime.timedelta(days=1)
+        calendar += date_line    
+        calendar += '|\n'
+        for i in range(3):
+            calendar += print_verticle_dividers()
+        calendar += print_divider_line()
+        if working_date.month != month:
+            break    
+
     print (calendar)
+    
+    # save calendar as text file
+    calendar_file_name = 'calender_{}_{}.txt'.format(year, month)
+    with open(calendar_file_name, 'w') as file_obj:
+        file_obj.write(calendar)
+        
+    print('Calendar saved as file: {}'.format(calendar_file_name))
             
 if __name__ == "__main__":
     main()
