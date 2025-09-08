@@ -33,11 +33,10 @@ def main():
         random_num = random.randint(1, 6)
         dice_total += random_num    
         dice_corners.append(get_dice_location())
-        update_grid(dice_corners[i])
     dice_corners = sorted(dice_corners)
+    update_grid(dice_corners)
         
     # we have everything saved in the lists, need to print the dice now
-    print(dice_corners)
     
     for row in screen_grid:
         for col in screen_grid:
@@ -154,20 +153,13 @@ def print_dice(n, loc):
                       
     print(print_string)
         
-def update_grid(loc):
-    row, col = loc[0], loc[1]
-    row_num = 0
-    col_num = 0
-    for x in range(row + 5):
-        row_num += 1
-        for y in range(col + 9):
-            if (col_num == 0 and row_num == 0) or (col_num == 8 and row_num == 0) or (col_num == 0 and row_num == 4) or (col_num == 8 and row_num == 4):
-                char = DICE_CORNER
-            elif col in [0, 4] and row in [1, 2, 3]:
-                char = DICE_SIDE
-            else:
-                char = ' '
-            col_num += 1
+def update_grid(corner_locations):
+    for location in corner_locations:
+        x, y = location[0], location[1]
+    
+    
+    
+    
     
 if __name__ == '__main__':
     main()
